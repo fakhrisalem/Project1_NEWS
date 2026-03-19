@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ZaMO.</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Anton&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap"
+        rel="stylesheet" />
+    <script src="main.js" defer></script>
+
+
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+
+    <div class="ticker" aria-hidden="true">
+        <div class="ticker-track">
+            <span>Live Scores</span><span class="dot">●</span>
+            <span>Transfer News</span><span class="sep">|</span>
+            <span>Politics</span><span class="dot">●</span>
+            <span>Markets</span><span class="sep">|</span>
+            <span>Champions League</span><span class="dot">●</span>
+            <span>World Cup 2026</span><span class="sep">|</span>
+            <span>Breaking News</span><span class="dot">●</span>
+            <span>Economy</span><span class="sep">|</span>
+
+            <span>Live Scores</span><span class="dot">●</span>
+            <span>Transfer News</span><span class="sep">|</span>
+            <span>Politics</span><span class="dot">●</span>
+            <span>Markets</span><span class="sep">|</span>
+            <span>Champions League</span><span class="dot">●</span>
+            <span>World Cup 2026</span><span class="sep">|</span>
+            <span>Breaking News</span><span class="dot">●</span>
+            <span>Economy</span><span class="sep">|</span>
+        </div>
+    </div>
+
+
+    <div class="nav-wrap">
+        <nav class="nav-inner" role="navigation">
+            <a href="index.html" class="brand">
+                <img src="./images (1)/football-football-player-svgrepo-com (1).png" class="brand-logo"
+                    alt="ZaMO logo" />
+                <div class="brand-name">
+                    <span class="bz">Z</span><span class="ba">a</span><span class="bm">M</span><span class="bo">O</span>
+                </div>
+            </a>
+
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+                <span></span><span></span><span></span>
+            </button>
+
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="Live.html">Live</a></li>
+                <li><a href="Standings.html">Standings</a></li>
+                <li><a href="stats.html">Stats</a></li>
+                <li><a href="team.html">Teams</a></li>
+            </ul>
+        </nav>
+    </div>
+
+
+    <section class="hero" id="hero">
+        <video autoplay muted loop playsinline class="hero-video">
+            <source src="./205193-926528071_small.mp4" type="video/mp4" />
+        </video>
+        <div class="hero-overlay"></div>
+        <div class="hero-grain"></div>
+
+        <div class="hero-body">
+            <div class="hero-tag">
+                <span class="live-dot"></span> Live Coverage
+            </div>
+
+            <p class="hero-kicker">Your global sports &amp; news hub</p>
+
+            <h1 class="hero-title">
+                The World<br>
+                <span class="ht-outline">Plays</span>
+                <span class="ht-red">Here.</span>
+            </h1>
+
+            <div class="hero-rule"></div>
+
+            <p class="hero-desc">
+                Real-time scores, breaking news and live standings —
+                from the stadium to the stock market.
+            </p>
+
+            <div class="hero-quick-links">
+                <a href="Live.html" class="hql-btn"><i class="bi bi-broadcast"></i> Live Scores</a>
+                <a href="Standings.html" class="hql-btn"><i class="bi bi-list-ol"></i> Standings</a>
+                <a href="stats.html" class="hql-btn"><i class="bi bi-bar-chart-fill"></i> Stats</a>
+                <a href="team.html" class="hql-btn"><i class="bi bi-shield-fill"></i> Teams</a>
+            </div>
+
+            <a href="Live.html" class="hero-cta">
+                <i class="bi bi-broadcast-pin"></i> Watch Live
+            </a>
+        </div>
+
+
+        <div class="hero-stats">
+            <div class="hstat">
+                <div class="hstat-val">12<span>+</span></div>
+                <div class="hstat-label">Live Matches</div>
+            </div>
+            <div class="hstat">
+                <div class="hstat-val">5</div>
+                <div class="hstat-label">Leagues</div>
+            </div>
+            <div class="hstat">
+                <div class="hstat-val">24<span>/7</span></div>
+                <div class="hstat-label">Coverage</div>
+            </div>
+            <div class="hstat">
+                <div class="hstat-val">Live</div>
+                <div class="hstat-label">Breaking News</div>
+            </div>
+        </div>
+    </section>
+
+
+    <div class="page-wrap" id="main">
+
+        <aside class="sidebar">
+
+
+            <div class="weather-card">
+                <div class="weather-top">
+                    <div class="weather-left">
+                        <p id="city"><i class="bi bi-geo-alt-fill"></i> Cairo, EG</p>
+                        <h2 id="temperature">28°C</h2>
+                        <p id="description">Partly Sunny</p>
+                    </div>
+                    <div class="weather-icon-wrap">
+                        <i class="bi bi-sun-fill weather-icon wi-sunny" id="weather-icon"></i>
+                    </div>
+                </div>
+                <div class="weather-bottom">
+                    <div class="w-stat">
+                        <span class="w-stat-val" id="w-feels">31°</span>
+                        <span class="w-stat-label">Feels like</span>
+                    </div>
+                    <div class="w-stat">
+                        <span class="w-stat-val" id="w-humidity">42%</span>
+                        <span class="w-stat-label">Humidity</span>
+                    </div>
+                    <div class="w-stat">
+                        <span class="w-stat-val" id="w-wind">14 km/h</span>
+                        <span class="w-stat-label">Wind</span>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <div class="s-label">Featured Matches</div>
+                <div class="match-card" id="matchescontainer">
+                    <div class="match-row">
+                        <div class="match-team">
+                            <img src="./images (1)/p3 (1).png" width="30" alt="ARS" />
+                            <div class="team-abbr">ARS</div>
+                        </div>
+                        <div>
+                            <span class="match-badge">25:00</span>
+                            <div class="match-label">Tonight</div>
+                        </div>
+                        <div class="match-team">
+                            <img src="./images (1)/p4 (1).png" width="30" alt="LIV" />
+                            <div class="team-abbr">LIV</div>
+                        </div>
+                    </div>
+                    <div class="match-row">
+                        <div class="match-team">
+                            <img src="./images (1)/p1 (1).png" width="30" alt="ARS" />
+                            <div class="team-abbr">ARS</div>
+                        </div>
+                        <div>
+                            <span class="match-badge">22:00</span>
+                            <div class="match-label">Tonight</div>
+                        </div>
+                        <div class="match-team">
+                            <img src="./images (1)/p2 (1).png" width="30" alt="LIV" />
+                            <div class="team-abbr">LIV</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div>
+                <div class="s-label">Market Watch</div>
+                <div class="currency-card">
+                    <div class="currency-head">Exchange Rates</div>
+                    <div class="currency-row">
+                        <span class="currency-name">USD / EGP</span>
+                        <span class="currency-val" id="usdRate">Loading…</span>
+                    </div>
+                    <div class="currency-row">
+                        <span class="currency-name">SAR / EGP</span>
+                        <span class="currency-val" id="sarRate">Loading…</span>
+                    </div>
+                    <div class="currency-row">
+                        <span class="currency-name" style="color:var(--gold)">Gold 24K</span>
+                        <span class="currency-val" id="goldRate">—</span>
+                    </div>
+                </div>
+            </div>
+
+        </aside>
+
+        <main>
+
+            <div class="content-section">
+                <div class="sec-head">
+                    <div class="sec-icon si-a"><i class="bi bi-trophy-fill"></i></div>
+                    <h3>General Sports</h3>
+                    <span class="sec-count d-none d-md-block">Latest Updates</span>
+                </div>
+                <div class="row g-3" id="sports-container">
+                    <div class="text-center py-5 w-100">
+                        <div class="spinner-border" role="status"><span class="visually-hidden">Loading…</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-section">
+                <div class="sec-head">
+                    <div class="sec-icon si-b"><i class="bi bi-patch-check-fill"></i></div>
+                    <h3>Football News</h3>
+                    <span class="sec-count d-none d-md-block">Latest Updates</span>
+                </div>
+                <div class="row g-3" id="football-container">
+                    <div class="text-center py-5 w-100">
+                        <div class="spinner-border" role="status"><span class="visually-hidden">Loading…</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-section">
+                <div class="sec-head">
+                    <div class="sec-icon si-c"><i class="bi bi-globe-americas"></i></div>
+                    <h3>Political World</h3>
+                    <span class="sec-count d-none d-md-block">Latest Updates</span>
+                </div>
+                <div class="row g-3" id="politics-container">
+                    <div class="text-center py-5 w-100">
+                        <div class="spinner-border" role="status"><span class="visually-hidden">Loading…</span></div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+
+    <footer class="site-footer">
+        <div class="footer-logo">Za<span>M</span>O</div>
+        <p class="footer-copy">© 2026 All rights reserved.</p>
+        <div class="footer-socials">
+            <a href="#" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
+            <a href="#" aria-label="Twitter"><i class="bi bi-twitter-x"></i></a>
+            <a href="#" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+
+    <script>
+        function updateWeatherIcon(desc) {
+            const el = document.getElementById('weather-icon');
+            if (!el || !desc) return;
+            const d = desc.toLowerCase();
+            const map = [
+                { k: ['thunder', 'storm', 'lightning'], icon: 'bi-cloud-lightning-rain-fill', cls: 'wi-stormy' },
+                { k: ['snow', 'blizzard', 'sleet'], icon: 'bi-snow', cls: 'wi-snowy' },
+                { k: ['rain', 'drizzle', 'shower'], icon: 'bi-cloud-rain-fill', cls: 'wi-rainy' },
+                { k: ['fog', 'mist', 'haze'], icon: 'bi-cloud-fog2-fill', cls: 'wi-foggy' },
+                { k: ['wind', 'breezy', 'gust'], icon: 'bi-wind', cls: 'wi-windy' },
+                { k: ['overcast', 'cloud'], icon: 'bi-cloudy-fill', cls: 'wi-cloudy' },
+                { k: ['partly', 'mostly sunny', 'partly cloudy'], icon: 'bi-cloud-sun-fill', cls: 'wi-sunny' },
+                { k: ['night', 'clear night'], icon: 'bi-moon-stars-fill', cls: 'wi-night' },
+                { k: ['sunny', 'clear', 'fine'], icon: 'bi-sun-fill', cls: 'wi-sunny' },
+            ];
+            for (const { k, icon, cls } of map) {
+                if (k.some(w => d.includes(w))) {
+                    el.className = `bi ${icon} weather-icon ${cls}`;
+                    return;
+                }
+            }
+            el.className = 'bi bi-cloud-fill weather-icon wi-cloudy';
+        }
+
+
+        const descEl = document.getElementById('description');
+        if (descEl) {
+            updateWeatherIcon(descEl.textContent);
+            new MutationObserver(() => updateWeatherIcon(descEl.textContent))
+                .observe(descEl, { childList: true, subtree: true, characterData: true });
+        }
+    </script>
+    <script>
+        document.getElementById('navToggle').addEventListener('click', function () {
+            document.getElementById('navLinks').classList.toggle('open');
+        });
+    </script>
+</body>
+
+</html>

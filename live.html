@@ -1,0 +1,1088 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ZaMO .</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+
+
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker-track">
+      <span>Live Scores</span><span class="dot">●</span>
+      <span>Transfer News</span><span class="sep">|</span>
+      <span>Politics</span><span class="dot">●</span>
+      <span>Markets</span><span class="sep">|</span>
+      <span>Champions League</span><span class="dot">●</span>
+      <span>World Cup 2026</span><span class="sep">|</span>
+      <span>Breaking News</span><span class="dot">●</span>
+      <span>Economy</span><span class="sep">|</span>
+     
+      <span>Live Scores</span><span class="dot">●</span>
+      <span>Transfer News</span><span class="sep">|</span>
+      <span>Politics</span><span class="dot">●</span>
+      <span>Markets</span><span class="sep">|</span>
+      <span>Champions League</span><span class="dot">●</span>
+      <span>World Cup 2026</span><span class="sep">|</span>
+      <span>Breaking News</span><span class="dot">●</span>
+      <span>Economy</span><span class="sep">|</span>
+    </div>
+  </div>
+
+
+  <div class="nav-wrap">
+    <nav class="nav-inner" role="navigation">
+      <a href="index.html" class="brand">
+        <img src="./images (1)/football-football-player-svgrepo-com (1).png"
+             class="brand-logo" alt="ZaMO logo" />
+        <div class="brand-name">
+          <span class="bz">Z</span><span class="ba">a</span><span class="bm">M</span><span class="bo">O</span>
+        </div>
+      </a>
+
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="Live.html">Live</a></li>
+        <li><a href="Standings.html">Standings</a></li>
+        <li><a href="stats.html">Stats</a></li>
+        <li><a href="team.html">Teams</a></li>
+      </ul>
+    </nav>
+  </div>
+    </header>
+
+
+    <div class="hero-strip">
+        <div class="hero-inner">
+            <div>
+                <h1>Match <em>Center</em></h1>
+            </div>
+            <div class="hero-pills">
+                <div class="pill">
+                    <div class="live-dot"></div> Live Scores
+                </div>
+                <div class="pill"><i class="bi bi-calendar3"></i> Fixtures</div>
+                <div class="pill"><i class="bi bi-search"></i> Team Search</div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="filter-wrap">
+        <div class="filter-card">
+
+
+            <div class="filter-group">
+                <label><i class="bi bi-calendar-event me-1"></i> From</label>
+                <input type="date" id="dateFrom">
+            </div>
+
+
+            <div class="filter-group">
+                <label><i class="bi bi-calendar-event me-1"></i> To</label>
+                <input type="date" id="dateTo">
+            </div>
+
+            <div class="filter-divider"></div>
+
+
+            <div class="filter-group" style="min-width:180px;">
+                <label><i class="bi bi-shield-fill me-1"></i> Team Name</label>
+                <input type="text" id="teamSearch" placeholder="e.g. Zamalek, Arsenal…">
+            </div>
+
+            <div class="filter-divider"></div>
+
+
+            <button class="btn-search" id="filterBtn">
+                <i class="bi bi-search"></i> Search
+            </button>
+
+            <button class="btn-live" id="liveBtn">
+                <div class="rdot"></div> Live Now
+            </button>
+
+        </div>
+
+
+        <div id="mode-indicator" style="display:none;" class="mode-badge">
+            <i class="bi bi-funnel-fill"></i>
+            <span id="mode-text"></span>
+        </div>
+    </div>
+
+
+    <div class="matches-wrap">
+        <div class="section-lbl">
+            Matches <span id="match-count">—</span>
+        </div>
+        <div id="matchesContainer">
+            <div class="load-box">
+                <div class="spin-ring"></div>
+                <p class="spin-lbl">Loading Live Scores</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const API_KEY = "6f635f919d2eda4f5ddecf71e09e2fba55c3be0e5eda04b89cdeadafca3ad4a3";
+
+        function teamFb(name) {
+            return `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=0f172a&color=fff&size=80&bold=true&format=svg`;
+        }
+
+
+        function statusPill(match) {
+            const s = (match.event_status || '').toLowerCase();
+            if (s.includes('finished') || s === 'ft') {
+                return `<span class="status-pill s-finished">FT</span>`;
+            }
+            if (match.event_status && !s.includes('ht') && isNaN(parseInt(match.event_status)) === false) {
+                return `<span class="status-pill s-live"><span style="width:7px;height:7px;border-radius:50%;background:#ef4444;display:inline-block;animation:blink 1s infinite"></span> ${match.event_status}'</span>`;
+            }
+            if (s === 'ht') return `<span class="status-pill s-live">HT</span>`;
+            if (s.includes('live') || s === '1st half' || s === '2nd half') {
+                return `<span class="status-pill s-live"><span style="width:7px;height:7px;border-radius:50%;background:#ef4444;display:inline-block;animation:blink 1s infinite"></span> LIVE</span>`;
+            }
+            return `<span class="status-pill s-upcoming"><i class="bi bi-clock me-1"></i>${match.event_time || 'Upcoming'}</span>`;
+        }
+
+        function isLiveMatch(match) {
+            const s = (match.event_status || '').toLowerCase();
+            return s.includes('live') || s === '1st half' || s === '2nd half' || s === 'ht' || !isNaN(parseInt(s));
+        }
+
+
+        function renderMatches(matches, label) {
+            const container = document.getElementById('matchesContainer');
+            const countEl = document.getElementById('match-count');
+
+            if (!matches || !matches.length) {
+                countEl.textContent = '0';
+                container.innerHTML = `
+        <div class="empty-box">
+          <i class="bi bi-calendar-x"></i>
+          <p>No matches found for this search.</p>
+        </div>`;
+                return;
+            }
+
+            countEl.textContent = matches.length;
+
+            container.innerHTML = matches.map((m, i) => {
+                const scores = (m.event_final_result || '0 - 0').split('-');
+                const homeScore = (scores[0] || '0').trim();
+                const awayScore = (scores[1] || '0').trim();
+                const live = isLiveMatch(m);
+                const homeLogo = m.home_team_logo || teamFb(m.event_home_team);
+                const awayLogo = m.away_team_logo || teamFb(m.event_away_team);
+                const leagueLogo = m.league_logo || '';
+                const delay = Math.min(i, 15) * 30;
+
+                return `
+        <div class="match-card ${live ? 'live-card' : ''}" style="animation-delay:${delay}ms">
+          <!-- top bar -->
+          <div class="card-top">
+            <div class="league-name">
+              ${leagueLogo ? `<img src="${leagueLogo}" alt="league">` : '<i class="bi bi-trophy-fill" style="color:var(--gold)"></i>'}
+              ${m.league_name || 'Football'}
+            </div>
+            ${statusPill(m)}
+          </div>
+
+          <!-- body -->
+          <div class="card-body-match">
+            <!-- home -->
+            <div class="team-block">
+              <div class="team-logo-wrap">
+                <img src="${homeLogo}" alt="${m.event_home_team}"
+                     onerror="this.src='${teamFb(m.event_home_team)}'">
+              </div>
+              <div class="team-name-txt">${m.event_home_team}</div>
+            </div>
+
+            <!-- score -->
+            <div class="score-block">
+              <div class="score-nums">
+                <span class="sn">${homeScore}</span>
+                <span class="sd">:</span>
+                <span class="sn">${awayScore}</span>
+              </div>
+              ${live
+                        ? `<div class="match-minute">${m.event_status || 'LIVE'}'</div>`
+                        : `<div class="match-date">${m.event_date || ''} ${m.event_time || ''}</div>`
+                    }
+            </div>
+
+            <!-- away -->
+            <div class="team-block">
+              <div class="team-logo-wrap">
+                <img src="${awayLogo}" alt="${m.event_away_team}"
+                     onerror="this.src='${teamFb(m.event_away_team)}'">
+              </div>
+              <div class="team-name-txt">${m.event_away_team}</div>
+            </div>
+          </div>
+        </div>`;
+            }).join('');
+        }
+
+
+        function showMode(text) {
+            const el = document.getElementById('mode-indicator');
+            document.getElementById('mode-text').textContent = text;
+            el.style.display = 'inline-flex';
+        }
+        function hideMode() {
+            document.getElementById('mode-indicator').style.display = 'none';
+        }
+
+        function showLoading(msg = 'Loading…') {
+            document.getElementById('matchesContainer').innerHTML = `
+      <div class="load-box">
+        <div class="spin-ring"></div>
+        <p class="spin-lbl">${msg}</p>
+      </div>`;
+            document.getElementById('match-count').textContent = '—';
+        }
+
+        function showError() {
+            document.getElementById('matchesContainer').innerHTML = `
+      <div class="err-box">
+        <i class="bi bi-exclamation-triangle-fill"></i>
+        <p>Connection error. Check your API key or network.</p>
+        <button class="retry-btn" onclick="loadLive()">
+          <i class="bi bi-arrow-clockwise me-1"></i> Retry
+        </button>
+      </div>`;
+        }
+
+        async function loadLive() {
+            showLoading('Loading Live Scores…');
+            showMode('🔴 Live Scores');
+            try {
+                const res = await fetch(`https://apiv2.allsportsapi.com/football/?met=Livescore&APIkey=${API_KEY}`);
+                const data = await res.json();
+                renderMatches(data.result, 'Live');
+            } catch (e) { showError(); }
+        }
+
+
+        async function loadByDate(from, to) {
+            showLoading('Searching Fixtures…');
+            showMode(`📅 ${from} → ${to}`);
+            try {
+                const res = await fetch(`https://apiv2.allsportsapi.com/football/?met=Fixtures&from=${from}&to=${to}&APIkey=${API_KEY}`);
+                const data = await res.json();
+                renderMatches(data.result, 'Fixtures');
+            } catch (e) { showError(); }
+        }
+
+
+        async function loadByTeam(teamName) {
+            showLoading(`Searching for "${teamName}"…`);
+            showMode(`🔍 Team: ${teamName}`);
+
+
+            const now = new Date();
+            const from = new Date(now); from.setDate(from.getDate() - 60);
+            const to = new Date(now); to.setDate(to.getDate() + 60);
+            const fmt = d => d.toISOString().split('T')[0];
+
+            try {
+                const res = await fetch(`https://apiv2.allsportsapi.com/football/?met=Fixtures&from=${fmt(from)}&to=${fmt(to)}&APIkey=${API_KEY}`);
+                const data = await res.json();
+
+                if (!data.result) { renderMatches([], ''); return; }
+
+                const q = teamName.toLowerCase().trim();
+                const filtered = data.result.filter(m =>
+                    m.event_home_team.toLowerCase().includes(q) ||
+                    m.event_away_team.toLowerCase().includes(q)
+                );
+                renderMatches(filtered, 'Team Search');
+            } catch (e) { showError(); }
+        }
+
+        document.getElementById('filterBtn').addEventListener('click', () => {
+            const from = document.getElementById('dateFrom').value;
+            const to = document.getElementById('dateTo').value;
+            const team = document.getElementById('teamSearch').value.trim();
+
+            if (team) {
+
+                loadByTeam(team);
+            } else if (from && to) {
+                loadByDate(from, to);
+            } else if (from && !to) {
+
+                loadByDate(from, from);
+            } else {
+                loadLive();
+            }
+        });
+
+     
+        document.getElementById('liveBtn').addEventListener('click', () => {
+            document.getElementById('dateFrom').value = '';
+            document.getElementById('dateTo').value = '';
+            document.getElementById('teamSearch').value = '';
+            loadLive();
+        });
+
+
+        document.getElementById('teamSearch').addEventListener('keydown', e => {
+            if (e.key === 'Enter') document.getElementById('filterBtn').click();
+        });
+
+
+        window.addEventListener('scroll', () => {
+            const d = document.documentElement;
+            document.getElementById('scroll-bar').style.width =
+                (d.scrollTop / (d.scrollHeight - d.clientHeight) * 100) + '%';
+        }, { passive: true });
+
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('dateFrom').value = today;
+            document.getElementById('dateTo').value = today;
+            loadLive();
+        });
+    </script>
+      <script>
+        document.getElementById('navToggle').addEventListener('click', function () {
+            document.getElementById('navLinks').classList.toggle('open');
+        });
+    </script>
+</body>
+
+</html>
+
+<style>
+    :root {
+        --primary: #2563eb;
+        --primary-lt: #eff6ff;
+        --red: #ef4444;
+        --orange: #f97316;
+        --green: #22c55e;
+        --gold: #f59e0b;
+        --bg: #f8fafd;
+        --surface: #ffffff;
+        --surface2: #f1f5fe;
+        --border: #e2e8f0;
+        --text: #0f172a;
+        --text2: #475569;
+        --muted: #94a3b8;
+        --r: 14px;
+    }
+
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    html {
+        scroll-behavior: smooth;
+    }
+
+    body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: 'DM Sans', sans-serif;
+        min-height: 100vh;
+        -webkit-font-smoothing: antialiased;
+        overflow-x: hidden;
+    }
+
+
+    #scroll-bar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 3px;
+        width: 0%;
+        background: linear-gradient(90deg, var(--primary), var(--orange), var(--gold));
+        z-index: 9999;
+        transition: width .08s linear;
+        border-radius: 0 3px 3px 0;
+        box-shadow: 0 0 8px rgba(37, 99, 235, .45);
+    }
+
+
+    .header-custom {
+        background: rgba(255, 255, 255, .96);
+        backdrop-filter: blur(14px);
+        border-bottom: 1px solid var(--border);
+        box-shadow: 0 1px 8px rgba(15, 23, 42, .06);
+        position: sticky;
+        top: 0;
+        z-index: 200;
+    }
+
+    .brand-logo-img {
+        width: 36px;
+        height: 36px;
+        object-fit: contain;
+        flex-shrink: 0;
+        filter: drop-shadow(0 2px 6px rgba(37, 99, 235, .3));
+        transition: transform .3s cubic-bezier(.34, 1.56, .64, 1);
+    }
+
+    .navbar-brand:hover .brand-logo-img {
+        transform: rotate(-12deg) scale(1.15);
+    }
+
+    .brand-text-container {
+        display: flex;
+        align-items: baseline;
+        line-height: 1;
+    }
+
+    .brand-text-container .z {
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 900;
+        color: var(--primary);
+        font-size: 1.85rem;
+        letter-spacing: -2px;
+    }
+
+    .brand-text-container .a {
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 300;
+        color: var(--text2);
+        font-size: 1.4rem;
+        font-style: italic;
+        letter-spacing: -2px;
+    }
+
+    .brand-text-container .m {
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 700;
+        color: var(--red);
+        font-size: 1.7rem;
+        letter-spacing: -2px;
+    }
+
+    .brand-text-container .o {
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 900;
+        color: var(--gold);
+        font-size: 1.85rem;
+        letter-spacing: -2px;
+    }
+
+    .navbar-nav .nav-link {
+        color: var(--text2) !important;
+        font-weight: 600;
+        font-size: .83rem;
+        padding: 7px 14px !important;
+        border-radius: 8px;
+        transition: background .15s, color .15s;
+    }
+
+    .navbar-nav .nav-link:hover {
+        background: var(--surface2);
+        color: var(--primary) !important;
+    }
+
+    .navbar-nav .nav-link.active {
+        background: var(--primary-lt);
+        color: var(--primary) !important;
+        box-shadow: inset 0 0 0 1px rgba(37, 99, 235, .2);
+    }
+
+    .navbar-toggler {
+        border-color: var(--border);
+        box-shadow: none !important;
+    }
+
+    .navbar-toggler-icon {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(15,23,42,.7)' stroke-linecap='round' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+    }
+
+    .hero-strip {
+        background: var(--surface);
+        border-bottom: 1px solid var(--border);
+    }
+
+    .hero-inner {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 34px 20px 26px;
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 16px;
+    }
+
+    .eyebrow {
+        font-size: .67rem;
+        font-weight: 700;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        color: var(--primary);
+        margin-bottom: 7px;
+    }
+
+    .hero-inner h1 {
+        font-family: 'Montserrat', sans-serif;
+        font-size: clamp(1.8rem, 4vw, 2.9rem);
+        font-weight: 900;
+        line-height: 1.05;
+    }
+
+    .hero-inner h1 em {
+        color: var(--primary);
+        font-style: normal;
+    }
+
+    .hero-pills {
+        display: flex;
+        gap: 9px;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+
+    .pill {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        background: var(--bg);
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        padding: 5px 13px;
+        font-size: .75rem;
+        font-weight: 600;
+        color: var(--text2);
+    }
+
+    .pill i {
+        color: var(--primary);
+        font-size: .82rem;
+    }
+
+    .live-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--red);
+        animation: blink 1s infinite;
+    }
+
+    @keyframes blink {
+
+        0%,
+        100% {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        50% {
+            opacity: .3;
+            transform: scale(.6);
+        }
+    }
+
+
+    .filter-wrap {
+        max-width: 1100px;
+        margin: 24px auto 0;
+        padding: 0 20px;
+    }
+
+    .filter-card {
+        background: var(--surface);
+        border: 1.5px solid var(--border);
+        border-radius: 16px;
+        padding: 20px 24px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px;
+        align-items: flex-end;
+        box-shadow: 0 2px 12px rgba(15, 23, 42, .05);
+    }
+
+    .filter-group {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        flex: 1;
+        min-width: 140px;
+    }
+
+    .filter-group label {
+        font-size: .65rem;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: var(--muted);
+    }
+
+    .filter-group input[type="date"],
+    .filter-group input[type="text"] {
+        padding: 9px 13px;
+        border: 1.5px solid var(--border);
+        border-radius: 10px;
+        font-family: 'DM Sans', sans-serif;
+        font-size: .87rem;
+        font-weight: 500;
+        color: var(--text);
+        background: var(--bg);
+        outline: none;
+        transition: border-color .2s, box-shadow .2s;
+    }
+
+    .filter-group input:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, .1);
+    }
+
+    .filter-group input::placeholder {
+        color: var(--muted);
+    }
+
+    .filter-divider {
+        width: 1px;
+        height: 42px;
+        background: var(--border);
+        align-self: flex-end;
+        flex-shrink: 0;
+    }
+
+    .btn-search {
+        padding: 10px 24px;
+        background: var(--primary);
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+        font-family: 'DM Sans', sans-serif;
+        font-size: .88rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: opacity .2s, transform .18s;
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        white-space: nowrap;
+        align-self: flex-end;
+        flex-shrink: 0;
+    }
+
+    .btn-search:hover {
+        opacity: .88;
+        transform: translateY(-1px);
+    }
+
+    .btn-live {
+        padding: 10px 18px;
+        background: var(--surface);
+        color: var(--red);
+        border: 1.5px solid rgba(239, 68, 68, .3);
+        border-radius: 10px;
+        font-family: 'DM Sans', sans-serif;
+        font-size: .85rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all .18s;
+        align-self: flex-end;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .btn-live:hover {
+        background: rgba(239, 68, 68, .06);
+        border-color: var(--red);
+    }
+
+    .btn-live .rdot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--red);
+        animation: blink 1s infinite;
+    }
+
+
+    .mode-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 12px;
+        border-radius: 999px;
+        font-size: .72rem;
+        font-weight: 700;
+        background: var(--primary-lt);
+        color: var(--primary);
+        border: 1px solid rgba(37, 99, 235, .2);
+        margin-top: 10px;
+    }
+
+    .matches-wrap {
+        max-width: 1100px;
+        margin: 22px auto 60px;
+        padding: 0 20px;
+    }
+
+    .matches-wrap .section-lbl {
+        font-size: .67rem;
+        font-weight: 700;
+        letter-spacing: 2.5px;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-bottom: 14px;
+        padding-left: 2px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .matches-wrap .section-lbl span {
+        background: var(--primary-lt);
+        color: var(--primary);
+        padding: 2px 9px;
+        border-radius: 999px;
+        font-size: .68rem;
+    }
+
+
+    .match-card {
+        background: var(--surface);
+        border: 1.5px solid var(--border);
+        border-radius: var(--r);
+        padding: 0;
+        margin-bottom: 10px;
+        overflow: hidden;
+        transition: transform .2s, box-shadow .2s, border-color .2s;
+        animation: fadeUp .35s ease both;
+    }
+
+    .match-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 28px rgba(37, 99, 235, .1);
+        border-color: rgba(37, 99, 235, .3);
+    }
+
+    .match-card.live-card {
+        border-color: rgba(239, 68, 68, .35);
+    }
+
+    .match-card.live-card:hover {
+        box-shadow: 0 8px 28px rgba(239, 68, 68, .12);
+    }
+
+    @keyframes fadeUp {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+
+    .card-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 8px 18px;
+        background: var(--bg);
+        border-bottom: 1px solid var(--border);
+        font-size: .68rem;
+        font-weight: 700;
+        color: var(--muted);
+        letter-spacing: .5px;
+    }
+
+    .card-top .league-name {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .card-top .league-name img {
+        width: 18px;
+        height: 18px;
+        object-fit: contain;
+        border-radius: 2px;
+    }
+
+
+    .status-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 3px 10px;
+        border-radius: 999px;
+        font-size: .68rem;
+        font-weight: 800;
+    }
+
+    .s-live {
+        background: rgba(239, 68, 68, .12);
+        color: var(--red);
+    }
+
+    .s-finished {
+        background: #f1f5f9;
+        color: var(--muted);
+    }
+
+    .s-upcoming {
+        background: var(--primary-lt);
+        color: var(--primary);
+    }
+
+
+    .card-body-match {
+        display: grid;
+        grid-template-columns: 1fr 140px 1fr;
+        align-items: center;
+        padding: 20px 18px;
+        gap: 10px;
+    }
+
+
+    .team-block {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        text-align: center;
+    }
+
+    .team-logo-wrap {
+        width: 68px;
+        height: 68px;
+        border-radius: 50%;
+        overflow: hidden;
+        background: var(--bg);
+        border: 2px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    .team-logo-wrap img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
+
+    .team-name-txt {
+        font-family: 'Montserrat', sans-serif;
+        font-size: .92rem;
+        font-weight: 800;
+        color: var(--text);
+        line-height: 1.2;
+    }
+
+    .score-block {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .score-nums {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .sn {
+        font-family: 'Montserrat', sans-serif;
+        font-size: 2.8rem;
+        font-weight: 900;
+        color: var(--text);
+        line-height: 1;
+    }
+
+    .sd {
+        font-size: 1.6rem;
+        color: var(--border);
+        font-weight: 300;
+    }
+
+    .match-date {
+        font-size: .75rem;
+        font-weight: 600;
+        color: var(--muted);
+    }
+
+    .match-minute {
+        font-family: 'Montserrat', sans-serif;
+        font-size: .8rem;
+        font-weight: 800;
+        color: var(--red);
+        background: rgba(239, 68, 68, .08);
+        padding: 2px 10px;
+        border-radius: 999px;
+    }
+
+
+    .load-box {
+        text-align: center;
+        padding: 80px 24px;
+    }
+
+    .spin-ring {
+        width: 40px;
+        height: 40px;
+        margin: 0 auto 14px;
+        border: 3px solid var(--border);
+        border-top-color: var(--primary);
+        border-radius: 50%;
+        animation: spin .75s linear infinite;
+    }
+
+    @keyframes spin {
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    .spin-lbl {
+        font-size: .7rem;
+        font-weight: 700;
+        letter-spacing: 2.5px;
+        text-transform: uppercase;
+        color: var(--muted);
+    }
+
+    .empty-box {
+        text-align: center;
+        padding: 70px 24px;
+        color: var(--muted);
+    }
+
+    .empty-box i {
+        font-size: 3rem;
+        opacity: .25;
+    }
+
+    .empty-box p {
+        margin-top: 12px;
+        font-size: .9rem;
+        font-weight: 600;
+    }
+
+    .err-box {
+        text-align: center;
+        padding: 60px 24px;
+        color: var(--muted);
+    }
+
+    .err-box i {
+        font-size: 2.8rem;
+        color: var(--red);
+        opacity: .5;
+    }
+
+    .err-box p {
+        margin-top: 10px;
+        font-size: .9rem;
+        font-weight: 600;
+    }
+
+    .retry-btn {
+        margin-top: 14px;
+        padding: 9px 24px;
+        background: var(--primary);
+        color: #fff;
+        border: none;
+        border-radius: 9px;
+        font-family: 'DM Sans', sans-serif;
+        font-size: .85rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: opacity .2s;
+    }
+
+    .retry-btn:hover {
+        opacity: .85;
+    }
+
+
+    @media (max-width: 680px) {
+        .filter-divider {
+            display: none;
+        }
+
+        .card-body-match {
+            grid-template-columns: 1fr 90px 1fr;
+            padding: 16px 12px;
+            gap: 6px;
+        }
+
+        .team-logo-wrap {
+            width: 50px;
+            height: 50px;
+        }
+
+        .team-name-txt {
+            font-size: .78rem;
+        }
+
+        .sn {
+            font-size: 2rem;
+        }
+
+        .hero-inner {
+            padding: 22px 16px 18px;
+        }
+
+        .filter-wrap,
+        .matches-wrap {
+            padding: 0 14px;
+        }
+    }
+
+    @media (max-width: 420px) {
+        .card-body-match {
+            grid-template-columns: 1fr 76px 1fr;
+            padding: 14px 10px;
+        }
+
+        .team-logo-wrap {
+            width: 42px;
+            height: 42px;
+        }
+
+        .sn {
+            font-size: 1.7rem;
+        }
+
+        .sd {
+            font-size: 1.2rem;
+        }
+
+        .team-name-txt {
+            font-size: .72rem;
+        }
+    }
+</style>
